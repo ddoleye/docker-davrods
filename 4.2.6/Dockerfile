@@ -8,10 +8,11 @@ RUN yum -y install \
     mod_ssl \
     && wget https://github.com/UtrechtUniversity/davrods/releases/download/4.2.6_1.4.2/davrods-4.2.6_1.4.2-1.rpm \
     && rpm --import https://packages.irods.org/irods-signing-key.asc \
-    && wget -qO - https://packages.irods.org/renci-irods.yum.repo | \
+    && curl -s https://packages.irods.org/renci-irods.yum.repo | \
     tee /etc/yum.repos.d/renci-irods.yum.repo \
     && yum -y makecache fast \
     && yum -y install jq \
+    && yum -y install irods-runtime-4.2.6-1 \
     && yum -y localinstall davrods-4.2.6_1.4.2-1.rpm \
     && rm -f davrods-4.2.6_1.4.2-1.rpm \
     && yum clean all
