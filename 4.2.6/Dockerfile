@@ -1,10 +1,15 @@
 FROM krallin/centos-tini:centos7
 MAINTAINER Michael J. Stealey <michael.j.stealey@gmail.com>
 
+# CentOS Vault 리포지토리를 사용하도록 yum 설정 변경 (CentOS 7 EOL)
+RUN sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-*.repo \
+    && sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*.repo
+
+RUN yum -y install wget
+RUN rpm -Uvh https://archives.fedoraproject.org/pub/archive/epel/7/x86_64/Packages/e/epel-release-7-14.noarch.rpm
+
 RUN yum -y install \
     sudo \
-    wget \
-    epel-release \
     mod_ssl \
     && wget https://github.com/UtrechtUniversity/davrods/releases/download/4.2.6_1.4.2/davrods-4.2.6_1.4.2-1.rpm \
     && rpm --import https://packages.irods.org/irods-signing-key.asc \
